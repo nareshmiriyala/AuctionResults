@@ -6,11 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +26,19 @@ public class App
     public static void main( String[] args ) throws IOException {
 
         String text = readPDFAndGetText();
-        System.out.println(text);
+        prepareHouseObjects(text);
+
+
+    }
+
+    private static void prepareHouseObjects(String text) throws IOException {
         BufferedReader bufReader = new BufferedReader(new StringReader(text));
         StringBuilder finalString=new StringBuilder();
         formatString(bufReader, finalString);
+        createHouses(finalString);
+    }
+
+    private static void createHouses(StringBuilder finalString) throws IOException {
         BufferedReader reader = new BufferedReader(new StringReader(finalString.toString()));
         String line=null;
         List<House> houseList=new ArrayList<House>();
@@ -52,8 +59,7 @@ public class App
             houseList.add(createHouse(split));
 
         }
-
-
+        System.out.println(houseList);
     }
 
     private static House createHouse(String[] split) {
@@ -85,8 +91,8 @@ public class App
         address.setSuburb(split[0]);
         String[] splitAdd = StringUtils.split(split[1], " ");
         address.setHouseNo(splitAdd[0]);
-        if(splitAdd.length==2)
-        address.setStreet(splitAdd[1]);
+        if(splitAdd.length>2)
+        address.setStreet(split[1].replace(splitAdd[0],"").trim());
         return address;
     }
 
@@ -97,12 +103,14 @@ public class App
             if(IsDate(line)){
                 continue;
             }
-            if(finalString.length()==0||line.matches("([a-zA-Z]|\\s)*")){
-                finalString.append(line);
-            } else if( !line.matches("^\\w(\\w|\\s)*\\d.*")){
-            finalString.append(WORD_SEPARATOR).append(line);
-        } else {
-                finalString.append("\n").append(line);
+            if(line.contains(" br ") && line.contains("$")) {
+                if (finalString.length() == 0 || line.matches("([a-zA-Z]|\\s)*")) {
+                    finalString.append(line);
+                } else if (!line.matches("^\\w(\\w|\\s)*\\d.*")) {
+                    finalString.append(WORD_SEPARATOR).append(line);
+                } else {
+                    finalString.append("\n").append(line);
+                }
             }
         }
     }
@@ -142,22 +150,19 @@ public class App
                 PDFTextStripper textStripper=new PDFTextStripper();
                 textStripper.setWordSeparator(WORD_SEPARATOR);
                 textStripper.setSortByPosition(true);
-                textStripper.setDropThreshold(4);
-                textStripper.setShouldSeparateByBeads(false);
                 String text = textStripper.getText(document);
-                text=text.replace("Saturday's Auctions","");
-                text=text.replace("Suburb     Address     Type     Price     Result     Agent","");
-                text=text.replace("KEY: S - property sold; SP - property sold prior; PI - property passed in; PN - sold prior not disclosed; SN - sold not disclosed; NB - no bid; VB - vendor bid; W - withdrawn prior to \n" +
-                        "auction; SA - sold after auction; SS - sold after auction price not disclosed. N/A - price or highest bid not available. br - bedroom(s); h - house,cottage,villa, semi,terrace; u - unit, \n" +
-                        "duplex; t - townhouse; dev site - development site; o res - other residential.\n" +
-                        "For a more comprehensive list of results covering all reported sales by postcode in the past 12 or 24 months, visit http://www.homepriceguide.com.au\n" +
-                        "Copyright © Australian Property Monitors 2015. Any reproduction of or reference to any part of this report must attribute Australian Property monitors as the source of the report.","");
-                text=text.replace("Property Snapshot.*", "");
-                text = Pattern.compile("Melbourne Auction Results.*default.aspx", Pattern.DOTALL).matcher(text).replaceAll("");
-                text = Pattern.compile("(?m)^[ \\t]*\\r?\\n").matcher(text).replaceAll("");
                 StringBuilder st=new StringBuilder(text.trim());
 
               finalStr= st.toString();
+                File file = new File("src/test/resources/replace.properties");
+                InputStream in = new FileInputStream(file);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                String line=null;
+                while ((line=br.readLine())!=null){
+                   if(line.length()>0){
+                       finalStr=finalStr.replaceAll(line,"");
+                   }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
