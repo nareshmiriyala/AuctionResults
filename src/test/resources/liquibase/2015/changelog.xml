@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet author="nareshm (generated)" id="1448836244451-1">
+    <changeSet author="nareshm (generated)" id="1448839600834-1">
         <createTable tableName="address">
-            <column defaultValueNumeric="0" name="id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
             </column>
             <column name="suburb" type="VARCHAR(20)"/>
             <column name="houseno" type="VARCHAR(20)"/>
             <column name="street" type="VARCHAR(20)"/>
-            <column name="houseid" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="nareshm (generated)" id="1448836244451-2">
+    <changeSet author="nareshm (generated)" id="1448839600834-2">
         <createTable tableName="house">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
@@ -21,17 +20,18 @@
             <column name="price" type="DECIMAL(10)"/>
             <column name="type" type="CHAR(11)"/>
             <column name="status" type="CHAR(11)"/>
+            <column name="address_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="nareshm (generated)" id="1448836244451-3">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="address"/>
+    <changeSet author="nareshm (generated)" id="1448839600834-3">
+        <addUniqueConstraint columnNames="houseno, suburb, street" constraintName="houseno" tableName="address"/>
     </changeSet>
-    <changeSet author="nareshm (generated)" id="1448836244451-4">
-        <createIndex indexName="address_FK" tableName="address">
-            <column name="houseid"/>
+    <changeSet author="nareshm (generated)" id="1448839600834-4">
+        <createIndex indexName="address_FK" tableName="house">
+            <column name="address_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="nareshm (generated)" id="1448836244451-5">
-        <addForeignKeyConstraint baseColumnNames="houseid" baseTableName="address" constraintName="address_FK" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="house"/>
+    <changeSet author="nareshm (generated)" id="1448839600834-5">
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="house" constraintName="address_FK" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="address"/>
     </changeSet>
 </databaseChangeLog>
