@@ -1,9 +1,15 @@
 package com.dellnaresh;
 
+import com.dellnaresh.db.House;
+import com.dellnaresh.db.HouseJpaController;
+import com.dellnaresh.entity.DBConnection;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  * Unit test for simple App.
@@ -45,4 +51,13 @@ public class AppTest
 
         assertTrue(true);
     }
+    public void testAddHouse()throws Exception{
+
+        HouseJpaController jpaController=new HouseJpaController(DBConnection.getInstance().getEMFactory());
+        House house = new House(1l);
+        house.setAgency("Brady Road");
+        jpaController.create(house);
+
+    }
+
 }

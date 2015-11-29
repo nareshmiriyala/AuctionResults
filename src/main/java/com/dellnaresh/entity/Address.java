@@ -1,4 +1,4 @@
-package entity;
+package com.dellnaresh.entity;
 
 /**
  * @author Proprietary information of Utiba. Copyright 2015 Utiba Pte Ltd. All
