@@ -5,6 +5,8 @@ package com.dellnaresh.enums;
  */
 public class Constants {
     public static final String WORD_SEPARATOR = "     ";
+    public static final String AUCTION_FILES_DIR = "src/test/resources/auction_files/";
+    public static final String WEB_SITE_URL="http://www.homepriceguide.com.au/saturday_auction_results/Melbourne_Domain.pdf";
 
     public enum TYPE{
 

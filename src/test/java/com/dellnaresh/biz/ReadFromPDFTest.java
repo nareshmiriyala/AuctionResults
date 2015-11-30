@@ -1,5 +1,6 @@
 package com.dellnaresh.biz;
 
+import com.dellnaresh.enums.Constants;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class ReadFromPDFTest {
 
     @Before
     public void setUp() throws Exception {
-        readFromPDF=new ReadFromPDF("src/test/resources/Melbourne_Domain.pdf");
+        readFromPDF=new ReadFromPDF(Constants.AUCTION_FILES_DIR+"Melbourne_Domain.pdf");
 
     }
 

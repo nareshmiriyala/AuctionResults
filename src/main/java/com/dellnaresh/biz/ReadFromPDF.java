@@ -15,13 +15,17 @@ import java.util.Date;
  * Created by nareshm on 29/11/2015.
  */
 public class ReadFromPDF {
-    private static String pdfFilePath=null;
+    private static File pdfFile=null;
     private static Date auctionDate=null;
     public ReadFromPDF(){
 
     }
     public ReadFromPDF(String filePath){
-        pdfFilePath=filePath;
+        pdfFile=new File(filePath);
+        auctionDate=null;
+    }
+    public ReadFromPDF(File file){
+        pdfFile=file;
         auctionDate=null;
     }
 
@@ -49,7 +53,7 @@ public class ReadFromPDF {
     public String readPDFAndGetText() throws IOException, ParseException {
         String finalStr=null;
         try {
-            PDDocument document=PDDocument.load(new File(pdfFilePath));
+            PDDocument document=PDDocument.load(getFile());
             if(!document.isEncrypted()){
                 PDFTextStripperByArea stripper = new PDFTextStripperByArea();
                 stripper.setSortByPosition( true );
@@ -81,10 +85,14 @@ public class ReadFromPDF {
         return formatString(finalStr);
     }
 
+    private File getFile() {
+        return pdfFile;
+    }
+
     public Date formatAuctionDate(String auctionDate) throws ParseException {
         auctionDate=auctionDate.replaceAll("st|nd|rd|th", "");
         String[] split = auctionDate.split(" ", 2);
-        SimpleDateFormat format=new SimpleDateFormat("dd MMMMM yyyy`");
+        SimpleDateFormat format=new SimpleDateFormat("dd MMMMM yyyy");
         Date parse = format.parse(split[1]);
         return parse;
     }
