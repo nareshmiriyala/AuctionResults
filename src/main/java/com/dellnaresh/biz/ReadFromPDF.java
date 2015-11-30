@@ -84,7 +84,7 @@ public class ReadFromPDF {
     public Date formatAuctionDate(String auctionDate) throws ParseException {
         auctionDate=auctionDate.replaceAll("st|nd|rd|th", "");
         String[] split = auctionDate.split(" ", 2);
-        SimpleDateFormat format=new SimpleDateFormat("dd MMMMM yyyy");
+        SimpleDateFormat format=new SimpleDateFormat("dd MMMMM yyyy`");
         Date parse = format.parse(split[1]);
         return parse;
     }
