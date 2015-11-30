@@ -7,18 +7,30 @@ import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 import java.io.*;
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by nareshm on 29/11/2015.
  */
 public class ReadFromPDF {
     private static String pdfFilePath=null;
-
-    private ReadFromPDF(){
+    private static Date auctionDate=null;
+    public ReadFromPDF(){
 
     }
     public ReadFromPDF(String filePath){
         pdfFilePath=filePath;
+        auctionDate=null;
+    }
+
+    public static Date getAuctionDate() {
+        return auctionDate;
+    }
+
+    public static void setAuctionDate(Date auctionDate) {
+        ReadFromPDF.auctionDate = auctionDate;
     }
 
     static boolean checkIfContainsDay(String line) {
@@ -34,7 +46,7 @@ public class ReadFromPDF {
     }
 
 
-    public String readPDFAndGetText() throws IOException {
+    public String readPDFAndGetText() throws IOException, ParseException {
         String finalStr=null;
         try {
             PDDocument document=PDDocument.load(new File(pdfFilePath));
@@ -52,10 +64,15 @@ public class ReadFromPDF {
                 InputStream in = new FileInputStream(file);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
                 String line=null;
+                int lineNumber=0;
                 while ((line=br.readLine())!=null){
                    if(line.length()>0){
                        finalStr=finalStr.replaceAll(line,"");
                    }
+                    if(lineNumber==2){
+                        auctionDate = formatAuctionDate(finalStr);
+                    }
+                    lineNumber++;
                 }
             }
         } catch (IOException e) {
@@ -63,6 +80,15 @@ public class ReadFromPDF {
         }
         return formatString(finalStr);
     }
+
+    public Date formatAuctionDate(String auctionDate) throws ParseException {
+        auctionDate=auctionDate.replaceAll("st|nd|rd|th", "");
+        String[] split = auctionDate.split(" ", 2);
+        SimpleDateFormat format=new SimpleDateFormat("dd MMMMM YYYY");
+        Date parse = format.parse(split[1]);
+        return parse;
+    }
+
     private static String formatString(String finalString) throws IOException {
         BufferedReader bufReader = new BufferedReader(new StringReader(finalString));
         String line;

@@ -6,6 +6,7 @@
 package com.dellnaresh.db;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,6 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "House.findByType", query = "SELECT h FROM House h WHERE h.type = :type"),
     @NamedQuery(name = "House.findByStatus", query = "SELECT h FROM House h WHERE h.status = :status")})
 public class House implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "auction_date")
+    @Temporal(TemporalType.DATE)
+    private Date auctionDate;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -131,6 +136,14 @@ public class House implements Serializable {
     @Override
     public String toString() {
         return "House{" + "id=" + id + ", agency=" + agency + ", noOfBedRooms=" + noOfBedRooms + ", price=" + price + ", type=" + type + ", status=" + status + ", addressId=" + addressId + '}';
+    }
+
+    public Date getAuctionDate() {
+        return auctionDate;
+    }
+
+    public void setAuctionDate(Date auctionDate) {
+        this.auctionDate = auctionDate;
     }
 
    

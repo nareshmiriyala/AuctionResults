@@ -48,10 +48,10 @@ public class HouseBuilder {
     }
 
     private static House createHouse(String[] split) {
-        com.dellnaresh.db.House house = new House();
+        House house = new House();
 
         try {
-
+            house.setAuctionDate(new ReadFromPDF().getAuctionDate());
             house.setAgency(split[5]);
             house.setAddressId(createAndSetAddress(split));
             if(split[2].length()>1) {

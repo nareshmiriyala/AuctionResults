@@ -8,6 +8,7 @@ package com.dellnaresh.db;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Address.findByHouseno", query = "SELECT a FROM Address a WHERE a.houseno = :houseno"),
     @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street")})
 public class Address implements Serializable {
+   
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,6 +114,7 @@ public class Address implements Serializable {
         return "Address{" + "id=" + id + ", suburb=" + suburb + ", houseno=" + houseno + ", street=" + street + '}';
     }
 
+   
    
     
 }

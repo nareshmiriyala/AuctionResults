@@ -3,6 +3,9 @@ package com.dellnaresh.biz;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.DateFormatSymbols;
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 public class ReadFromPDFTest {
@@ -17,6 +20,11 @@ public class ReadFromPDFTest {
     @Test
     public void testReadPDFAndGetText() throws Exception {
         String s = readFromPDF.readPDFAndGetText();
-        System.out.println(s);
+
+    }
+    @Test
+    public void testFormatDate() throws Exception{
+        Date date = readFromPDF.formatAuctionDate("Saturday 21st November 2015");
+        System.out.println(date);
     }
 }
