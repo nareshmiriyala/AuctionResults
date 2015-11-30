@@ -61,7 +61,6 @@ public class ReadFromPDF {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Without Format:"+finalStr);
         return formatString(finalStr);
     }
     private static String formatString(String finalString) throws IOException {
