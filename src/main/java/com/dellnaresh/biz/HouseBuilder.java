@@ -8,8 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.math.BigDecimal;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +15,12 @@ import java.util.List;
  * Created by nareshm on 29/11/2015.
  */
 public class HouseBuilder {
-    public static final String WORD_SEPARATOR = "     ";
     private static long count=0;
 
     public static  List<House>  prepareHouseObjects(String text) throws IOException {
-        BufferedReader bufReader = new BufferedReader(new StringReader(text));
-        StringBuilder finalString=new StringBuilder();
-        formatString(bufReader, finalString);
-        return createHouses(finalString);
+
+
+        return createHouses(new StringBuilder(text));
     }
 
     private static  List<House>  createHouses(StringBuilder finalString) throws IOException {
@@ -32,7 +28,7 @@ public class HouseBuilder {
         String line=null;
         List<House> houseList=new ArrayList<House>();
         while( (line=reader.readLine()) != null ){
-            String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, WORD_SEPARATOR);
+            String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, Constants.WORD_SEPARATOR);
 
             if(split.length<6){
                 String[] temp=new String[6];
@@ -86,48 +82,4 @@ public class HouseBuilder {
         return address;
     }
 
-    private static void formatString(BufferedReader bufReader, StringBuilder finalString) throws IOException {
-        String line;
-        while( (line=bufReader.readLine()) != null )
-        {
-            if(IsDate(line)){
-                continue;
-            }
-            if(line.contains(" br ") && line.contains("$")) {
-                if (finalString.length() == 0 || line.matches("([a-zA-Z]|\\s)*")) {
-                    finalString.append(line);
-                } else if (!line.matches("^\\w(\\w|\\s)*\\d.*")) {
-                    finalString.append(WORD_SEPARATOR).append(line);
-                } else {
-                    finalString.append("\n").append(line);
-                }
-            }
-        }
-    }
-
-    private static boolean IsDate(String line) {
-        String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
-                "August", "September", "October", "November", "December" };
-        for(String mon:monthName){
-            if (line.toLowerCase().indexOf(mon.toLowerCase()) != -1 ) {
-
-                if(checkIfContainsDay(line)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private static boolean checkIfContainsDay(String line) {
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] arrayOfWeekDaysNames = dfs.getWeekdays();
-        for( String dayName : arrayOfWeekDaysNames ) {
-            if (line.toLowerCase().indexOf(dayName.toLowerCase()) != -1 ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
+   }

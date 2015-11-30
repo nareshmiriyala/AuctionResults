@@ -4,6 +4,8 @@ package com.dellnaresh.enums;
  * Created by nareshm on 29/11/2015.
  */
 public class Constants {
+    public static final String WORD_SEPARATOR = "     ";
+
     public enum TYPE{
 
         h("HOUSE"),
