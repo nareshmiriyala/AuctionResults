@@ -49,7 +49,12 @@ public abstract class FileListener {
                 WatchEvent pathEvent = (WatchEvent) genericEvent;
                 Path file = (Path) pathEvent.context();
                 System.out.println("File name: " + file.toString());
-                doProcessing(file);
+                try {
+                    doProcessing(file);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
             boolean validKey = key.reset();
