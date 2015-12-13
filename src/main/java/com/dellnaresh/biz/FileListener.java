@@ -19,7 +19,7 @@ public abstract class FileListener {
         WatchService watchService = FileSystems.getDefault().newWatchService();
         Path path = Paths.get(dir);
 
-        WatchKey watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+        WatchKey watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,StandardWatchEventKinds.ENTRY_MODIFY);
         for (;;) {
 
             WatchKey key;
